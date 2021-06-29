@@ -79,9 +79,7 @@ def result_to_csv(result):
                 csv_writer.writerow([key, value, ''])
 
 
-def performance_data(url, language, key, strategy, category, csv_export=False):
-    result_raw_json = api_call(url, language, key, strategy, category)
-
+def performance_data(url, strategy, category):
     result = {
         'url': url,
         'type': category,
@@ -108,12 +106,12 @@ def performance_data(url, language, key, strategy, category, csv_export=False):
                 audit_data[1] = value
             result['audits'].append(audit_data)
 
-    if csv_export:
-        result_to_csv(result)
-
     return result
 
 
 if __name__ == '__main__':
     url, language, key, strategy, category, csv_export = get_config()
-    performance_data(url, language, key, strategy, category, csv_export)
+    result_raw_json = api_call(url, language, key, strategy, category)
+    result = performance_data(url, strategy, category)
+    if csv_export:
+        result_to_csv(result)
